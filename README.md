@@ -18,7 +18,7 @@
     </h4>
 </div>
 
-<img src="assets/pct_intro.png" width="700px"/>
+<img src="assets/PTC_intro.png" width="700px"/>
 
 </div>
 
