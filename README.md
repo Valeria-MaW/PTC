@@ -30,7 +30,7 @@
 
 ```bash
 # Clone this repository
-git clone https://github.com/<your-github-username>/PTC.git
+git clone https://github.com/Valeria-MaW/PTC.git
 cd PTC
 
 # Create a new conda environment
@@ -45,8 +45,8 @@ pip install -r requirements.txt
 
 We include the following dataset configurations in this repo:
 
-1. `With background class`: PASCAL VOC, PASCAL Context, PASCAL Context 459 (PC459), Cityscapes, ADE20K, ADE847, and COCO-Stuff164k.
-2. `Without background class`: VOC20, Context59 (i.e., PASCAL VOC and PASCAL Context without the background category), and COCO-Object.
+1. `With background class`: Pascal VOC21 (VOC21), PASCAL Context60 (Context60), COCO-Object (Object).
+2. `Without background class`: Pascal VOC20 (VOC20), Cityscapes (City), Pascal Context59 (Context59), ADE20k-150 (ADE), COCO-Stuff (Stuff).
 
 For datasets, please follow the [MMSeg data preparation document](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md) to download and preprocess the datasets.
 
@@ -99,7 +99,7 @@ This project is licensed under <a rel="license" href="https://github.com/mc-lan/
 
 ## Acknowledgement
 
-This implementation is based on ProxyCLIP. Thanks for the awesome work.
+This implementation is based on [ProxyCLIP](https://github.com/mc-lan/ProxyCLIP). Thanks for the awesome work.
 
 ## Contact
 
