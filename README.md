@@ -18,7 +18,11 @@
     </h4>
 </div>
 
+<<<<<<< Updated upstream
 <img src="assets/PTC_intro.png" width="700px"/>
+=======
+<img src="assets/PTC_intro.png" width="900px"/>
+>>>>>>> Stashed changes
 
 </div>
 
@@ -45,8 +49,8 @@ pip install -r requirements.txt
 
 We include the following dataset configurations in this repo:
 
-1. `With background class`: Pascal VOC21 (VOC21), PASCAL Context60 (Context60), COCO-Object (Object).
-2. `Without background class`: Pascal VOC20 (VOC20), Cityscapes (City), Pascal Context59 (Context59), ADE20k-150 (ADE), COCO-Stuff (Stuff).
+1. `With background class`: PASCAL VOC21 (VOC21), PASCAL Context60 (Context60), COCO-Object (Object).
+2. `Without background class`: PASCAL VOC20 (VOC20), Cityscapes (City), PASCAL Context59 (Context59), ADE20k-150 (ADE), COCO-Stuff (Stuff).
 
 For datasets, please follow the [MMSeg data preparation document](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md) to download and preprocess the datasets.
 
