@@ -3,7 +3,7 @@
 <h1>Perceptual Anchoring: Prototype-Guided Text Calibration for Training-free Open-Vocabulary Semantic Segmentation</h1>
 
 <div>
-    <a href="" target="_blank">Ma Wanli</a>&emsp;
+    <a href="" target="_blank">Wanli Ma</a>&emsp;
     <a href="" target="_blank">Jiangwen Lu</a>&emsp;
     <a href="" target="_blank">Qinmu Peng</a>&emsp;
     <a href="" target="_blank">Xinge You</a>
@@ -14,7 +14,7 @@
 
 <div>
     <h4 align="center">
-        • <a href="" target="_blank">[arXiv]</a> •
+        • <a href="https://arxiv.org/abs/2608.03991" target="_blank">[arXiv]</a> •
     </h4>
 </div>
 
