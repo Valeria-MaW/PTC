@@ -18,11 +18,7 @@
     </h4>
 </div>
 
-<<<<<<< Updated upstream
-<img src="assets/PTC_intro.png" width="700px"/>
-=======
 <img src="assets/PTC_intro.png" width="900px"/>
->>>>>>> Stashed changes
 
 </div>
 
