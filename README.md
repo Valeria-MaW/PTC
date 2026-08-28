@@ -3,12 +3,7 @@
 <h1>Perceptual Anchoring: Prototype-Guided Text Calibration for Training-free Open-Vocabulary Semantic Segmentation</h1>
 
 <div>
-    <a href="" target="_blank">Wanli Ma</a>&emsp;
-    <!--
-    <a href="" target="_blank">Jiangwen Lu</a>&emsp;
-    <a href="" target="_blank">Qinmu Peng</a>&emsp;
-    <a href="" target="_blank">Xinge You</a>
-    -->
+    <a href="" target="_blank">Wanli Ma</a>
 </div>
 
 <div>
@@ -23,24 +18,8 @@
 <img src="assets/PTC_intro.png" width="900px"/>
 
 </div>
-<!--
-## Abstract
-The abstract will be added here.
--->
 
-## Implementation Details
-
-### Configuration Scope
-
-PTC configurations (`ptc_min_seeds` and `ptc_mu`) for ProxyCLIP with CLIP ViT-B/16 and DINO-B/8 are provided in `configs/` and should not be assumed to transfer directly to other backbones or baselines.
-Configurations for the additional backbone variants and baseline methods evaluated in the paper will be released upon acceptance.
-
-<!--
-### Sliding-window Prototype Construction
-For sliding-window inference, PTC aggregates crop-level prototypes across overlapping crops; when the number of crops or the vocabulary size is large, an image-level prototype requires supporting evidence from at least two crops.
--->
-
-### Dependencies and Installation
+## Dependencies and Installation
 
 ```bash
 # Clone this repository
@@ -60,7 +39,7 @@ pip install -r requirements.txt
 We include the following dataset configurations in this repo:
 
 1. `With background class`: PASCAL VOC21 (VOC21), PASCAL Context60 (Context60), COCO-Object (Object).
-2. `Without background class`: PASCAL VOC20 (VOC20), Cityscapes (City), PASCAL Context59 (Context59), ADE20k-150 (ADE), COCO-Stuff (Stuff).
+2. `Without background class`: PASCAL VOC20 (VOC20), Cityscapes (City), PASCAL Context59 (Context59), ADE20K-150 (ADE), COCO-Stuff (Stuff).
 
 For datasets, please follow the [MMSeg data preparation document](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md) to download and preprocess the datasets.
 
@@ -102,9 +81,20 @@ GPUS=GPU_NUM python eval_all.py
 
 Results will be saved in `results.xlsx`.
 
+### Configuration Note
+
+PTC configurations (`ptc_min_seeds` and `ptc_mu`) for ProxyCLIP with CLIP ViT-B/16 and DINO-B/8 are provided in `configs/` and should not be assumed to transfer directly to other backbones or baselines.
+Configurations for the additional backbone variants and baseline methods evaluated in the paper will be released upon acceptance.
+
 ## Citation
 
-```bibtex
+```
+@article{ma2026perceptual,
+  title={Perceptual Anchoring: Prototype-Guided Text Calibration for Training-free Open-Vocabulary Semantic Segmentation},
+  author={Ma, Wanli and Lu, Jiangwen and Peng, Qinmu and You, Xinge},
+  journal={arXiv preprint arXiv:2608.03991},
+  year={2026}
+}
 ```
 
 ## Acknowledgement
