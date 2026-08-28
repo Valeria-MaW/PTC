@@ -7,7 +7,7 @@ model = dict(
     checkpoint=None,
     # ----- PTC Configuration -----
     ptc_enable=True,
-    ptc_proto_mode='auto',  # Prototype extraction mode:
+    ptc_proto_mode='auto',  # Prototype extraction mode: 'auto' | 'crop' | 'image'.
     # 'auto' : use 'crop' if slide_crop > 0; otherwise use 'image'
     # 'crop' : extract prototypes from fixed local windows
     # 'image': extract prototypes from the full image
@@ -42,3 +42,9 @@ default_hooks = dict(
     checkpoint=dict(type='CheckpointHook', by_epoch=False, interval=2000),
     sampler_seed=dict(type='DistSamplerSeedHook'),
     visualization=dict(type='SegVisualizationHook', interval=5))
+
+'''
+# -----commands:-------
+GPUS=1 python eval_all.py
+python eval.py --config ./configs/cfg_voc20.py --work-dir work_logs/voc20/
+'''

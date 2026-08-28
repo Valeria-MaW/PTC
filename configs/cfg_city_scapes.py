@@ -5,8 +5,8 @@ model = dict(
     name_path='./configs/cls_city_scapes.txt',
     slide_stride=112,
     slide_crop=224,
-    ptc_mu=0.35,
     ptc_min_seeds=2,
+    ptc_mu=0.35,
 )
 
 # dataset settings

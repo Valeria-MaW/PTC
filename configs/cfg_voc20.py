@@ -3,14 +3,14 @@ _base_ = './base_config.py'
 # model settings
 model = dict(
     name_path='./configs/cls_voc20.txt',
-    pct_min_seeds=10,
-    ptc_mu=0.15,
+    ptc_min_seeds=132,
+    ptc_mu=0.08,
     ptc_border=1,
 )
 
 # dataset settings
 dataset_type = 'PascalVOC20Dataset'
-data_root = ''
+data_root = './datasets/VOCdevkit/VOC2012/'
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),

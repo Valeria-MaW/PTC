@@ -4,14 +4,14 @@ _base_ = './base_config.py'
 model = dict(
     name_path='./configs/cls_voc21.txt',
     prob_thd= 0.2,     # 0.2  OURS  0.1 CLIP-B/16
-    pct_min_seeds=100,
+    ptc_min_seeds=100,
     ptc_mu=0.30,
     ptc_border=1,
 )
 
 # dataset settings
 dataset_type = 'PascalVOCDataset'
-data_root = ''
+data_root = './datasets/VOCdevkit/VOC2012/'
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),

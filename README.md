@@ -4,9 +4,11 @@
 
 <div>
     <a href="" target="_blank">Wanli Ma</a>&emsp;
+    <!--
     <a href="" target="_blank">Jiangwen Lu</a>&emsp;
     <a href="" target="_blank">Qinmu Peng</a>&emsp;
     <a href="" target="_blank">Xinge You</a>
+    -->
 </div>
 
 <div>
@@ -21,12 +23,24 @@
 <img src="assets/PTC_intro.png" width="900px"/>
 
 </div>
-
+<!--
 ## Abstract
+The abstract will be added here.
+-->
 
-<!-- The abstract will be added here. -->
+## Implementation Details
 
-## Dependencies and Installation
+### Configuration Scope
+
+PTC configurations (`ptc_min_seeds` and `ptc_mu`) for ProxyCLIP with CLIP ViT-B/16 and DINO-B/8 are provided in `configs/` and should not be assumed to transfer directly to other backbones or baselines.
+Configurations for the additional backbone variants and baseline methods evaluated in the paper will be released upon acceptance.
+
+<!--
+### Sliding-window Prototype Construction
+For sliding-window inference, PTC aggregates crop-level prototypes across overlapping crops; when the number of crops or the vocabulary size is large, an image-level prototype requires supporting evidence from at least two crops.
+-->
+
+### Dependencies and Installation
 
 ```bash
 # Clone this repository
@@ -71,19 +85,19 @@ For SAM, please download the checkpoints from [SAM](https://github.com/facebookr
 Single-GPU:
 
 ```bash
-python eval.py --config ./config/cfg_DATASET.py --workdir YOUR_WORK_DIR
+python eval.py --config ./configs/cfg_DATASET.py --work-dir YOUR_WORK_DIR
 ```
 
 Multi-GPU:
 
 ```bash
-bash ./dist_test.sh ./config/cfg_DATASET.py
+bash ./dist_test.sh ./configs/cfg_DATASET.py
 ```
 
 Evaluation on all datasets:
 
 ```bash
-python eval_all.py
+GPUS=GPU_NUM python eval_all.py
 ```
 
 Results will be saved in `results.xlsx`.
@@ -92,10 +106,6 @@ Results will be saved in `results.xlsx`.
 
 ```bibtex
 ```
-
-## License
-
-This project is licensed under <a rel="license" href="https://github.com/mc-lan/SmooSeg/blob/master/LICENSE">NTU S-Lab License 1.0</a>. Redistribution and use should follow this license.
 
 ## Acknowledgement
 

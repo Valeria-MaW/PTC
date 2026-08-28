@@ -65,16 +65,14 @@ class PrototypeGuidedTextCalibrator(nn.Module):
             device=query_idx.device,
             dtype=query_idx.dtype,
         )
-        assert torch.equal(unique_idx, expected_idx), (
-            "query_idx must contain contiguous class indices starting from 0."
-        )
-        assert bool(torch.all(query_idx[:-1] <= query_idx[1:])), (
-            "query_idx must be arranged in ascending class order."
-        )
-        if query_features.shape[0] == expected_idx.numel():
-            assert torch.equal(query_idx, expected_idx), (
-                "query_idx must follow ascending class order when each class has one query."
-            )
+        if not torch.equal(unique_idx, expected_idx):
+            raise ValueError("query_idx must contain contiguous class indices starting from 0.")
+
+        if not bool(torch.all(query_idx[:-1] <= query_idx[1:])):
+            raise ValueError("query_idx must be arranged in ascending class order.")
+
+        if (query_features.shape[0] == expected_idx.numel() and not torch.equal(query_idx, expected_idx)):
+            raise ValueError("query_idx must follow ascending class order when each class has one query.")
 
         self.register_buffer("query_features", query_features, persistent=False)
         self.register_buffer("query_idx", query_idx, persistent=False)
@@ -126,8 +124,6 @@ class PrototypeGuidedTextCalibrator(nn.Module):
     def forward(self, img, return_info=False):
         """Build calibrated query features for a batch of images."""
         mode = self.resolve_ptc_proto_mode(raise_error=True)
-        if mode is None:
-            return None
 
         if mode == "image":
             return self.ptc_build_calibrated_queries(img, mode="image", return_info=return_info)
@@ -172,7 +168,6 @@ class PrototypeGuidedTextCalibrator(nn.Module):
                     cls_fea_sum,
                     cls_reg_count,
                     cls_seed_count,
-                    num_crops=num_regions,
                 )
 
             calibrated = self.ptc_calibrate_queries_with_prototypes(
@@ -228,7 +223,7 @@ class PrototypeGuidedTextCalibrator(nn.Module):
                 yield img_one[:, :, y1:y2, x1:x2]
 
     def ptc_accumulate_proto_for_region(self, region_img, cls_fea_sum, cls_reg_count,
-                                        cls_seed_count, *, num_crops):
+                                        cls_seed_count):
         """Extract visual evidence from one region and update prototype statistics."""
         H0, W0 = region_img.shape[2:]
         pad = self.compute_padsize(H0, W0, self.pad_divisor)
@@ -243,12 +238,11 @@ class PrototypeGuidedTextCalibrator(nn.Module):
         valid = self.ptc_token_filter(I, J, ph, pw, pad, H0, W0, device=feats.device)
         self.ptc_accumulate_proto_stats(
             cls_fea_sum, cls_reg_count, cls_seed_count,
-            feats, query_scores, valid, num_crops=num_crops)
+            feats, query_scores, valid)
 
     def ptc_accumulate_proto_stats(self, cls_fea_sum, cls_reg_count, cls_seed_count,
-                                   image_features, query_scores, valid_mask, *, num_crops):
-        """Select reliable seed tokens by margin and update prototype statistics."""
-        del num_crops
+                                   image_features, query_scores, valid_mask):
+        """Select per-class evidence tokens by score margin and accumulate crop-level prototypes."""
 
         img_feat = image_features[0]
         query_score = query_scores[0]
@@ -305,7 +299,7 @@ class PrototypeGuidedTextCalibrator(nn.Module):
 
     def ptc_calibrate_queries_with_prototypes(self, cls_fea_sum, cls_reg_count, cls_seed_count, *,
                                               num_crops, return_info=False):
-        """Generate prototypes and calibrate original query features."""
+        """Generate prototypes and calibrate the corresponding query features"""
         base_q = self.query_features.to(device=cls_fea_sum.device)
         query_idx = self.query_idx.to(device=cls_fea_sum.device)
 
@@ -313,19 +307,22 @@ class PrototypeGuidedTextCalibrator(nn.Module):
         D = int(base_q.shape[1])
         class_prototypes = torch.zeros((self.num_classes, D), device=base_q.device, dtype=torch.float32)
 
+        # When only one crop is available, allow single-crop support
         if num_crops == 1:
             min_crops = 1
         else:
+            # When there are many crops or classes, require cross-crop support to avoid constructing semantically incorrect prototypes
             compact_regime = (num_crops <= 16) and (self.num_classes <= 30)
             min_crops = 1 if compact_regime else 2
 
-        ptc_min_seeds_total = self.ptc_min_seeds
-        valid_classes = (cls_reg_count >= min_crops) & (cls_seed_count >= ptc_min_seeds_total)
+        ptc_min_seeds = self.ptc_min_seeds
+        valid_classes = (cls_reg_count >= min_crops) & (cls_seed_count >= ptc_min_seeds)
 
         if self.ptc_skip_bg and self.num_classes > 0:
             valid_classes = valid_classes.clone()
             valid_classes[0] = False
 
+        # Average valid crop-level prototypes and normalize the resulting image-level prototype.
         if bool(valid_classes.any()):
             class_prototypes[valid_classes] = (
                     cls_fea_sum[valid_classes] / (cls_reg_count[valid_classes].unsqueeze(-1) + 1e-6)
@@ -340,9 +337,9 @@ class PrototypeGuidedTextCalibrator(nn.Module):
             if not bool(class_query_mask.any()):
                 continue
 
-            # Increase calibration strength with the amount of visual evidence.
+            # Adapt the calibration strength to the total amount of evidence.
             n = float(cls_seed_count[c].item())
-            denom = float(ptc_min_seeds_total) * 10.0
+            denom = float(ptc_min_seeds) * 10.0
             rel = min(1.0, math.log1p(n) / math.log1p(denom))
             mu_c = self.ptc_mu * rel
 
@@ -366,7 +363,7 @@ class PrototypeGuidedTextCalibrator(nn.Module):
             ),
             "delta_q": float((calibrated_query_features - base_q.unsqueeze(0)).abs().mean().item()),
             "min_crops": int(min_crops),
-            "ptc_min_seeds_total": int(ptc_min_seeds_total),
+            "ptc_min_seeds": int(ptc_min_seeds),
         }
 
         if self.ptc_debug:
@@ -390,7 +387,7 @@ class PrototypeGuidedTextCalibrator(nn.Module):
         return torch.stack(cls_score_list, dim=-1)
 
     def ptc_token_filter(self, I, J, ph, pw, pad, H, W, *, device):
-        """Build a valid-token mask for a padded region."""
+        """Mask out padded and optional border tokens before evidence selection."""
         l, _, t, _ = pad
         l0, t0 = l // pw, t // ph
         I0, J0 = H // ph, W // pw

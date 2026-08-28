@@ -4,13 +4,13 @@ _base_ = './base_config.py'
 model = dict(
     name_path='./configs/cls_coco_object.txt',
     prob_thd=0.25,   # 0.25 OURS   0.1 CLIP
-    pct_min_seeds=10,
-    ptc_mu=0.15,
+    ptc_min_seeds=132,
+    ptc_mu=0.02,
 )
 
 # dataset settings
 dataset_type = 'COCOObjectDataset'
-data_root = ''
+data_root = './datasets/coco_object'
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),

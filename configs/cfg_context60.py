@@ -4,14 +4,14 @@ _base_ = './base_config.py'
 model = dict(
     name_path='./configs/cls_context60.txt',
     prob_thd=0.15,  # 0.15 OURS   0.05 CLIP
-    pct_min_seeds=64,
+    ptc_min_seeds=64,
     ptc_mu=0.02,
-    pct_skip_bg=True,
+    ptc_skip_bg=True,
 )
 
 # dataset settings
 dataset_type = 'PascalContext60Dataset'
-data_root = ''
+data_root = './datasets/VOCdevkit/VOC2010/'
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),

@@ -25,13 +25,14 @@ from ptc import PrototypeGuidedTextCalibrator
 
 @MODELS.register_module()
 class PTCSegmentation(BaseSegmentor):
+    """ProxyCLIP-based segmentor with prototype-guided text calibration."""
     def __init__(self, clip_type, model_type, vfm_model, name_path, checkpoint=None, device=torch.device('cuda'),
                  prob_thd=0.0, logit_scale=40, beta=1.2, gamma=3.0, slide_stride=112, slide_crop=336,
 
                  # ---- PTC configuration ----
                  ptc_enable=False,
                  ptc_proto_mode='auto',  # 'auto' | 'crop' | 'image'
-                 ptc_proto_crop=224,
+                 ptc_proto_crop=224, # Local window size for prototype extraction; independent of slide_crop.
                  ptc_mu=0.1,
                  ptc_seed_ratio=0.10,
                  ptc_min_seeds=40,

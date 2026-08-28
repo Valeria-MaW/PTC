@@ -3,13 +3,13 @@ _base_ = './base_config.py'
 # model settings
 model = dict(
     name_path='./configs/cls_ade20k.txt',
-    pct_min_seeds=10,
+    ptc_min_seeds=10,
     ptc_mu=0.15,
 )
 
 # dataset settings
 dataset_type = 'ADE20KDataset'
-data_root = ''
+data_root = './datasets/ade/ADEChallengeData2016'
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),

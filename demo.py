@@ -6,7 +6,7 @@ import torch
 from PIL import Image, ImageColor, ImageDraw, ImageFont
 from torchvision import transforms
 
-from ptc_segmentor_ptc import PTCSegmentation
+from ptc_segmentor import PTCSegmentation
 
 
 # Input and output settings
@@ -179,7 +179,7 @@ def main():
     )
     image_tensor = preprocess(image).unsqueeze(0).cuda()
 
-    model = ProxyCLIPSegmentation(
+    model = PTCSegmentation(
         clip_type="openai",
         model_type="ViT-B/16",
         vfm_model="dino",

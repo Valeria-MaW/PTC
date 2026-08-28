@@ -3,13 +3,13 @@ _base_ = './base_config.py'
 # model settings
 model = dict(
     name_path='./configs/cls_coco_stuff.txt',
-    pct_min_seeds=128,
-    ptc_mu=0.02,
+    ptc_min_seeds=8,
+    ptc_mu=0.15,
 )
 
 # dataset settings
 dataset_type = 'COCOStuffDataset'
-data_root = ''
+data_root = './datasets/coco_stuff164k/'
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),

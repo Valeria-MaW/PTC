@@ -3,13 +3,13 @@ _base_ = './base_config.py'
 # model settings
 model = dict(
     name_path='./configs/cls_context59.txt',
-    pct_min_seeds=28,
+    ptc_min_seeds=28,
     ptc_mu=0.12,
 )
 
 # dataset settings
 dataset_type = 'PascalContext59Dataset'
-data_root = ''
+data_root = './datasets/VOCdevkit/VOC2010/'
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),
